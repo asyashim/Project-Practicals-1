@@ -1,11 +1,36 @@
-import { validateName, validateEmail, validatePassword, validateConfirm } from "./model.js"
-import { showError, showSuccess } from "./view.js"
+import { validateName, validateEmail, validatePassword, validateConfirm, saveToStorage, getFromStorage } from "./model.js"
+import { showError, showSuccess, showSuccessMessage, resetForm, renderUsers } from "./view.js"
 
 const form = document.getElementById("form")
 const name = document.getElementById("name")
 const email = document.getElementById("email")
 const password = document.getElementById("password")
 const confirmPassword = document.getElementById("confirmPassword")
+const submitBtn = form.querySelector("button[type='submit']")
+
+function isFormValid() {
+  return (
+    validateName(name.value) &&
+    validateEmail(email.value) &&
+    validatePassword(password.value) &&
+    validateConfirm(password.value, confirmPassword.value)
+  )
+}
+
+function updateSubmitState() {
+  submitBtn.disabled = !isFormValid()
+}
+
+// disable on load
+updateSubmitState()
+
+// render any existing users from localStorage on page load
+renderUsers(getFromStorage())
+
+// re-check on every keystroke
+;[name, email, password, confirmPassword].forEach(input => {
+  input.addEventListener("input", updateSubmitState)
+})
 
 form.addEventListener("submit", function(e){
   e.preventDefault()
@@ -41,6 +66,10 @@ form.addEventListener("submit", function(e){
   }
 
   if(isValid){
-    alert("Form submitted successfully!")
+    saveToStorage({ name: name.value, email: email.value })
+    renderUsers(getFromStorage())
+    showSuccessMessage()
+    resetForm(form, [name, email, password, confirmPassword])
+    updateSubmitState()
   }
 })

@@ -14,3 +14,13 @@ export function validatePassword(password) {
 export function validateConfirm(password, confirmPassword) {
   return password === confirmPassword
 }
+
+export function saveToStorage(data) {
+  const existing = getFromStorage()
+  existing.push(data)
+  localStorage.setItem("formSubmissions", JSON.stringify(existing))
+}
+
+export function getFromStorage() {
+  return JSON.parse(localStorage.getItem("formSubmissions") || "[]")
+}

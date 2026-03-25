@@ -25,4 +25,22 @@
   <button type="submit">Submit</button>
 </form>
 
+<div id="successMessage" class="success-message" style="display:none;">
+  Form submitted successfully!
+</div>
+
+<div id="userList" style="margin-top:20px; display:none;">
+  <h3>Submitted Users</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody"></tbody>
+  </table>
+</div>
+
 <script type="module" src="./js/controller.js"></script>
